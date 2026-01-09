@@ -14,7 +14,7 @@ features = pd.DataFrame(
     data=[
         ["Alpha", 112, 0.5],
         ["Beta", 54, 4.8],
-        ["Gamma", 227, 11.2],
+        ["Gamma", 227, 8.2],
         ["Delta", 98, 6.7],
         ["Epsilon", 120, 1.3],
         ["Zeta", 112, 3.9],
@@ -22,69 +22,77 @@ features = pd.DataFrame(
 )
 features['Benefit'] = features['Multiplier'] * features['Cost']
 
+
+def per_feature(feature_set):
+    st.subheader("Per Feature", divider="grey")
+    st.markdown(f"Target: {metric.format.format(target)}")
+    ranked = feature_set.sort_values("Multiplier", ascending=False)
+    st.dataframe(
+        ranked.style.format({
+            "Multiplier": metric.format,
+        }),
+        column_config={
+            "Feature": st.column_config.TextColumn(width="large"),
+            "Cost": st.column_config.NumberColumn(format="%.1f"),
+            "Benefit": st.column_config.NumberColumn(format="%.1f"),
+            "Multiplier": st.column_config.NumberColumn(format="%.1fx"),
+        },
+        column_order=["Feature", "Cost", "Benefit", "Multiplier"],
+        hide_index=True,
+    )
+
+
+def feature_map(feature_set):
+    st.subheader("Feature Map", divider="grey")
+    st.markdown("Which features are pulling their weight?")
+    bubbles = alt.Chart(feature_set).mark_circle().encode(
+        x=alt.X("Cost:Q", title="Cost (hours spent)"),
+        y=alt.Y("Benefit:Q", title="Benefit (hours saved)"),
+        size=alt.Size("Multiplier:Q", legend=None),
+        color=alt.Color("Feature:N", legend=alt.Legend(orient="left")),
+        tooltip=["Feature", "Cost", "Benefit", "Multiplier"],
+    )
+    maximum = feature_set["Cost"].max() * 1.05
+    target_guide = f"target {metric.format.format(target)}"
+    guides = pd.DataFrame(
+        columns=["Guide", "Cost", "Benefit"],
+        data=[
+            ["break even", 0, 0],
+            ["break even", maximum, maximum],
+            [target_guide, 0, 0],
+            [target_guide, maximum, maximum * target],
+        ],
+    )
+    break_even = alt.Chart(guides).mark_line(
+        color="silver",
+        size=1,
+        strokeDash=[8, 2],
+        tooltip=None,
+    ).encode(
+        x=alt.X("Cost:Q"),
+        y=alt.Y("Benefit:Q"),
+        detail="Guide:N",
+    )
+    label = break_even.mark_text(
+        color="silver",
+        align="left",
+        dx=8,
+        tooltip=None,
+    ).encode(
+        text="Guide",
+        opacity=alt.condition(alt.datum.Cost > 0, alt.value(1), alt.value(0)),
+    )
+    st.altair_chart(alt.layer(bubbles, break_even, label))
+
+    st.warning("*Could instead use 'adoption' measurement as bubble size*", icon=":material/help:")
+
 st.title("Leverage Multiplier")
 st.markdown("For every hour we spent building this, how many hours did we give back to the business?")
 
-st.subheader("Per Feature")
-st.markdown(f"Target: {metric.format.format(target)}")
-ranked = features.sort_values("Multiplier", ascending=False)
-st.dataframe(
-    ranked.style.format({
-        "Multiplier": metric.format,
-    }),
-    column_config={
-        "Feature": st.column_config.TextColumn(width="large"),
-        "Cost": st.column_config.NumberColumn(format="%.1f"),
-        "Benefit": st.column_config.NumberColumn(format="%.1f"),
-        "Multiplier": st.column_config.NumberColumn(format="%.1fx"),
-    },
-    column_order=["Feature", "Cost", "Benefit", "Multiplier"],
-    hide_index=True,
-)
+per_feature(features)
+feature_map(features)
 
-st.markdown("Which features are pulling their weight?")
-bubbles = alt.Chart(features).mark_circle().encode(
-    x=alt.X("Cost:Q", title="Cost (hours spent)"),
-    y=alt.Y("Benefit:Q", title="Benefit (hours saved)"),
-    size=alt.Size("Multiplier:Q", legend=None),
-    color=alt.Color("Feature:N", legend=alt.Legend(orient="left")),
-    tooltip=["Feature", "Cost", "Benefit", "Multiplier"],
-)
-maximum = features["Cost"].max() * 1.05
-target_guide = f"target {metric.format.format(target)}"
-guides = pd.DataFrame(
-    columns=["Guide", "Cost", "Benefit"],
-    data=[
-        ["break-even", 0, 0],
-        ["break-even", maximum, maximum],
-        [target_guide, 0, 0],
-        [target_guide, maximum, maximum * target],
-    ],
-)
-break_even = alt.Chart(guides).mark_line(
-    color="silver",
-    size=1,
-    strokeDash=[8, 2],
-    tooltip=None,
-).encode(
-    x=alt.X("Cost:Q"),
-    y=alt.Y("Benefit:Q"),
-    detail="Guide:N",
-)
-label = break_even.mark_text(
-    color="silver",
-    align="left",
-    dx=8,
-    tooltip=None,
-).encode(
-    text="Guide",
-    opacity=alt.condition(alt.datum.Cost > 0, alt.value(1), alt.value(0)),
-)
-st.altair_chart(alt.layer(bubbles, break_even, label))
-
-st.warning("*Could use 'adoption' measurement as bubble size*", icon=":material/help:")
-
-st.subheader("Return on Investment")
+st.subheader("Return on Investment :material/event:", divider="grey")
 st.markdown("How much effort is the platform saving us right now, compared to what it cost to build?")
 st.markdown(
     "Calculation:"
@@ -93,7 +101,7 @@ st.markdown(
     "\n- costs = total developer effort invested to date"
 )
 
-st.subheader("Leverage Flow")
+st.subheader("Leverage Flow :material/event:", divider="grey")
 st.markdown("Are we increasing or decreasing organisational leverage in this reporting period?")
 st.markdown(
     "Stacked bars:"

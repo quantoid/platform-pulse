@@ -24,11 +24,11 @@ current = pd.DataFrame(
         "Trend",
     ],
     data=[
-        to_row(1, 'reliability', 99.9, "flat"),
-        to_row(2, 'friction', -24.7, "down"),
-        to_row(2, 'satisfaction', 51, "up"),
         to_row(3, 'adoption', 72, "down"),
         to_row(1, 'leverage', 3.2, "flat"),
-        to_row(1, 'velocity', 53, "up"),
+        to_row(2, 'satisfaction', 51, "up"),
+        to_row(1, 'reliability', 99.9, "flat"),
+        to_row(2, 'friction', -24.7, "down"),
+        to_row(1, 'velocity', 8.7, "up"),
     ],
 )

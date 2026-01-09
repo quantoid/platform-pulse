@@ -23,7 +23,7 @@ features = pd.DataFrame(
 st.title("Adoption Rate")
 st.markdown("Of the users who saw a feature, what percentage actually used it?")
 
-st.subheader("Per Feature")
+st.subheader("Per Feature", divider="grey")
 st.markdown(f"Target: {metric.format.format(target)}")
 ranked = features.sort_values('Rate', ascending=False)
 left, right = st.columns(2, gap="large")
