@@ -2,12 +2,11 @@ import streamlit as st
 import altair as alt
 
 from views import implementation
-from data import metrics, targets, features
+from data.indicators import metrics, targets
+from data.features import platform
 
 metric = metrics['adoption']
 target = targets['adoption']
-
-feature_set = features.platform
 
 st.title("Adoption Rate")
 st.markdown("Of the users who saw a feature, what percentage actually used it?")
@@ -15,7 +14,7 @@ st.markdown("Of the users who saw a feature, what percentage actually used it?")
 st.subheader("Per Feature", divider="grey")
 st.markdown(f"Target: {metric.format.format(target)}")
 
-ranked = feature_set.sort_values("Adoption", ascending=False)
+ranked = platform.sort_values("Adoption", ascending=False)
 left, right = st.columns(2, gap="large")
 with right:
     st.altair_chart(
@@ -38,7 +37,7 @@ with left:
         hide_index=True,
     )
 # Show most frequently used feature.
-usage = feature_set.sort_values('Used', ascending=False)
+usage = platform.sort_values('Used', ascending=False)
 most = usage.iloc[0]
 least = usage.iloc[-1]
 st.info(

@@ -6,14 +6,15 @@ Status shows whether action is suggested or required to bring a metric back on t
 Drill down using the top navigation bar to see what has been driving an indicator off track.
 """
 import streamlit as st
-import data.indicators as indicators
+
 from views import implementation
+from data.indicators import current
 
 
 st.title("Platform KPIs")
 st.subheader("Current Status", divider="grey")
 st.table(
-    data=indicators.current,
+    data=current,
     border="horizontal",
 )
 st.markdown(__doc__)

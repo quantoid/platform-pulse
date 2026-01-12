@@ -3,13 +3,12 @@ import pandas as pd
 import altair as alt
 
 from views import implementation
-from data import metrics, targets, features
+from data.indicators import metrics, targets
+from data.features import platform
 
 
 metric = metrics['leverage']
 target = targets['leverage']
-
-feature_set = features.platform
 
 
 def per_feature(feats):
@@ -91,8 +90,8 @@ def feature_map(feats):
 st.title("Leverage Multiplier")
 st.markdown("For every hour we spent building this, how many hours did we give back to the business?")
 
-per_feature(feature_set)
-feature_map(feature_set)
+per_feature(platform)
+feature_map(platform)
 
 st.subheader("Return on Investment :material/event:", divider="grey")
 st.markdown("How much effort is the platform saving us right now, compared to what it cost to build?")

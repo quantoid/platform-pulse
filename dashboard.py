@@ -5,7 +5,7 @@ A Streamlit app for monitoring platform metrics and insights.
 """
 import streamlit as st
 import pandas as pd
-from data import metrics
+from data.indicators import metrics
 
 # Icons for overview then view per metric.
 views = {

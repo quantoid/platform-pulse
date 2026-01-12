@@ -24,6 +24,7 @@ platform = pd.DataFrame(
     ],
 )
 
+# Calculate derived values.
 platform["Adoption"] = 100 * platform["Used"] / platform["Seen"]
 platform["Benefit"] = platform["Save"] * platform["Used"]
 platform["Multiplier"] = platform["Benefit"] / platform["Cost"]
