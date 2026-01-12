@@ -2,17 +2,16 @@ import streamlit as st
 import altair as alt
 
 from views import implementation
-from data.indicators import metrics, targets
+from data.indicators import metrics
 from data.features import platform
 
 metric = metrics['adoption']
-target = targets['adoption']
 
 st.title("Adoption Rate")
 st.markdown("Of the users who saw a feature, what percentage actually used it?")
 
 st.subheader("Per Feature", divider="grey")
-st.markdown(f"Target: {metric.format.format(target)}")
+st.markdown(f"Target: {metric.format.format(metric.target)}")
 
 ranked = platform.sort_values("Adoption", ascending=False)
 left, right = st.columns(2, gap="large")

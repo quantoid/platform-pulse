@@ -3,17 +3,16 @@ import pandas as pd
 import altair as alt
 
 from views import implementation
-from data.indicators import metrics, targets
+from data.indicators import metrics
 from data.features import platform
 
 
 metric = metrics['leverage']
-target = targets['leverage']
 
 
 def per_feature(feats):
     st.subheader("Per Feature", divider="grey")
-    st.markdown(f"Target: {metric.format.format(target)}")
+    st.markdown(f"Target: {metric.format.format(metric.target)}")
     ranked = feats.sort_values("Multiplier", ascending=False)
     st.dataframe(
         ranked.style.format({
@@ -56,14 +55,14 @@ def feature_map(feats):
         ],
     )
     maximum = feats["Cost"].max() * 1.05
-    target_guide = f"target {metric.format.format(target)}"
+    target_guide = f"target {metric.format.format(metric.target)}"
     guides = pd.DataFrame(
         columns=["Guide", "Cost", "Benefit"],
         data=[
             ["break even", 0, 0],
             ["break even", maximum, maximum],
             [target_guide, 0, 0],
-            [target_guide, maximum, maximum * target],
+            [target_guide, maximum, maximum * metric.target],
         ],
     )
     break_even = alt.Chart(guides).mark_line(

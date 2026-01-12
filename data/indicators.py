@@ -7,26 +7,47 @@ class Metric:
     icon: str
     indicator: str
     format: str
+    target: float
 
 
 # Metric IDs with Material icons, format, and indicator description.
 metrics = {
-    "adoption": Metric(icon="web_traffic", indicator="Who used it when they could", format="{:3g}%"),
-    "leverage": Metric(icon="whatshot", indicator="Return on investment", format="{:.2g}x"),
-    "satisfaction": Metric(icon="sentiment_satisfied", indicator="Users satisfied with a task", format="{:.3g}%"),
-    "reliability": Metric(icon="lightbulb", indicator="Working hours availability", format="{:.3g}%"),
-    "friction": Metric(icon="block", indicator="Reduction in support demand", format="{:+.3g}%"),
-    "velocity": Metric(icon="speed", indicator="Increase in team velocity", format="{:.3g}%"),
-}
-
-# Current numerical target for each metric.
-targets = {
-    "adoption": 80,
-    "leverage": 3,
-    "satisfaction": 75,
-    "reliability": 99.5,
-    "friction": -30,
-    "velocity": 10,
+    "adoption": Metric(
+        icon="web_traffic",
+        indicator="Who used it when they could",
+        format="{:3g}%",
+        target=80,
+    ),
+    "leverage": Metric(
+        icon="whatshot",
+        indicator="Return on investment",
+        format="{:.2g}x",
+        target=3,
+    ),
+    "satisfaction": Metric(
+        icon="sentiment_satisfied",
+        indicator="Users satisfied with a task",
+        format="{:.3g}%",
+        target=75,
+    ),
+    "reliability": Metric(
+        icon="lightbulb",
+        indicator="Working hours availability",
+        format="{:.3g}%",
+        target=99.5,
+    ),
+    "friction": Metric(
+        icon="block",
+        indicator="Reduction in support demand",
+        format="{:+.3g}%",
+        target=-30,
+    ),
+    "velocity": Metric(
+        icon="speed",
+        indicator="Increase in team velocity",
+        format="{:.3g}%",
+        target=10,
+    ),
 }
 
 # How status IDs 0..3 map to traffic lights and descriptions.
@@ -41,11 +62,10 @@ statuses = [
 
 def to_row(status, indicator, value, trend):
     metric = metrics[indicator]
-    target = targets[indicator]
     return [
         statuses[status],
         metric.indicator,
-        metric.format.format(target),
+        metric.format.format(metric.target),
         metric.format.format(value),
         f":material/trending_{trend}:",
     ]
