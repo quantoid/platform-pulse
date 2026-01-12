@@ -11,10 +11,10 @@ class Metric:
 
 # Metric IDs with Material icons, format, and indicator description.
 metrics = {
-    "adoption": Metric(icon="web_traffic", indicator="Percent who used when seen", format="{:3g}%"),
+    "adoption": Metric(icon="web_traffic", indicator="Who used it when they could", format="{:3g}%"),
     "leverage": Metric(icon="whatshot", indicator="Return on investment", format="{:.2g}x"),
-    "satisfaction": Metric(icon="sentiment_satisfied", indicator="Percentage satisfied", format="{:.3g}%"),
-    "reliability": Metric(icon="lightbulb", indicator="Percentage availability", format="{:.3g}%"),
+    "satisfaction": Metric(icon="sentiment_satisfied", indicator="Users satisfied with a task", format="{:.3g}%"),
+    "reliability": Metric(icon="lightbulb", indicator="Working hours availability", format="{:.3g}%"),
     "friction": Metric(icon="block", indicator="Reduction in support demand", format="{:+.3g}%"),
     "velocity": Metric(icon="speed", indicator="Increase in team velocity", format="{:.3g}%"),
 }
