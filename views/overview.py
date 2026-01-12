@@ -31,7 +31,7 @@ st.success(
     "**Velocity is 3 points above target and trending up**  \n"
     "Drill down to find out which teams are performing well"
     " and give them recognition for their efforts."
-    " See if they are doing things that other teams can learn from.",
+    " See if they are doing things from which other teams can learn.",
     icon=":material/check_circle:",
 )
 
