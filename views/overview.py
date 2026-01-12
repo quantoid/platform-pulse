@@ -1,9 +1,9 @@
 """
 These key performance indicators (KPIs) provide a snapshot of the current status
 of the business impact of the platform team's efforts over the reporting period.
-Trends show the direction each indicator has been moving over the period.
-Status shows whether action is suggested or required to bring a metric back on track.
-Drill down using the top navigation bar to see what has been driving an indicator off track.
+- Trends show the direction each indicator has been moving in over the period.
+- Status shows whether action is suggested or required to bring a metric back on track.
+- Drill down using the top navigation bar to see what has been driving an indicator off track.
 """
 import streamlit as st
 
