@@ -41,6 +41,7 @@ implementation(notes=[
     "Each metric has its own module to render visualisations using metric-specific data.",
     "Data could be pulled from anywhere, e.g. Jira REST API, GitHub API, databases.",
     "Data can be cached by Streamlit to improve responsiveness.",
+    "Areas like Reliability could have more than one indicator.",
     "Status is based on trend and deviation from target, e.g. amber if below target but trending up.",
     "Historical values could be calculated and a selector added to the sidebar to explore past values.",
 ])
