@@ -3,30 +3,19 @@ import pandas as pd
 import altair as alt
 
 from views import implementation
-from data import metrics, targets
+from data import metrics, targets, features
 
 
 metric = metrics['leverage']
 target = targets['leverage']
 
-features = pd.DataFrame(
-    columns=["Feature", "Cost", "Multiplier"],
-    data=[
-        ["Alpha", 112, 0.5],
-        ["Beta", 54, 4.8],
-        ["Gamma", 227, 8.2],
-        ["Delta", 98, 6.7],
-        ["Epsilon", 120, 1.3],
-        ["Zeta", 112, 3.9],
-    ],
-)
-features['Benefit'] = features['Multiplier'] * features['Cost']
+feature_set = features.platform
 
 
-def per_feature(feature_set):
+def per_feature(feats):
     st.subheader("Per Feature", divider="grey")
     st.markdown(f"Target: {metric.format.format(target)}")
-    ranked = feature_set.sort_values("Multiplier", ascending=False)
+    ranked = feats.sort_values("Multiplier", ascending=False)
     st.dataframe(
         ranked.style.format({
             "Multiplier": metric.format,
@@ -42,17 +31,23 @@ def per_feature(feature_set):
     )
 
 
-def feature_map(feature_set):
+def feature_map(feats):
     st.subheader("Feature Map", divider="grey")
     st.markdown("Which features are pulling their weight?")
-    bubbles = alt.Chart(feature_set).mark_circle().encode(
+    bubbles = alt.Chart(feats).mark_circle().encode(
         x=alt.X("Cost:Q", title="Cost (hours spent)"),
         y=alt.Y("Benefit:Q", title="Benefit (hours saved)"),
-        size=alt.Size("Multiplier:Q", legend=None),
+        size=alt.Size("Adoption:Q", legend=None),
         color=alt.Color("Feature:N", legend=alt.Legend(orient="left")),
-        tooltip=["Feature", "Cost", "Benefit", "Multiplier"],
+        tooltip=[
+            "Feature",
+            "Cost",
+            "Benefit",
+            alt.Tooltip("Multiplier:Q", format=".1f"),
+            alt.Tooltip("Adoption:Q", format=".1f"),
+        ],
     )
-    maximum = feature_set["Cost"].max() * 1.05
+    maximum = feats["Cost"].max() * 1.05
     target_guide = f"target {metric.format.format(target)}"
     guides = pd.DataFrame(
         columns=["Guide", "Cost", "Benefit"],
@@ -84,13 +79,11 @@ def feature_map(feature_set):
     )
     st.altair_chart(alt.layer(bubbles, break_even, label))
 
-    st.warning("*Could instead use 'adoption' measurement as bubble size*", icon=":material/help:")
-
 st.title("Leverage Multiplier")
 st.markdown("For every hour we spent building this, how many hours did we give back to the business?")
 
-per_feature(features)
-feature_map(features)
+per_feature(feature_set)
+feature_map(feature_set)
 
 st.subheader("Return on Investment :material/event:", divider="grey")
 st.markdown("How much effort is the platform saving us right now, compared to what it cost to build?")
