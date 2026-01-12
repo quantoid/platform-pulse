@@ -34,7 +34,16 @@ def per_feature(feats):
 def feature_map(feats):
     st.subheader("Feature Map", divider="grey")
     st.markdown("Which features are pulling their weight?")
-    bubbles = alt.Chart(feats).mark_circle().encode(
+    bubbles = alt.Chart(
+        feats,
+        title=alt.Title(
+            text="bubble size shows percentage adoption",
+            anchor="middle",
+            fontWeight="normal",
+            fontSize=12,
+            color="silver",
+        ),
+    ).mark_circle().encode(
         x=alt.X("Cost:Q", title="Cost (hours spent)"),
         y=alt.Y("Benefit:Q", title="Benefit (hours saved)"),
         size=alt.Size("Adoption:Q", legend=None),
